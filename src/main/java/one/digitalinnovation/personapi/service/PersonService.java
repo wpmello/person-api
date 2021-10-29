@@ -8,6 +8,9 @@ import one.digitalinnovation.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PersonService {
 
@@ -27,5 +30,10 @@ public class PersonService {
         Person savedPerson = personRepository.save(personToSave);
         return MessageResponseDTO.builder()
                 .message("Created person with ID " + savedPerson.getId()).build(); // <---- O resultado do annotation '@Builder' na classe
+    }
+
+    public List<PersonDTO> listAll() {
+        List<Person> allPerson = personRepository.findAll();
+        return allPerson.stream().map(personMapper::toDTO).collect(Collectors.toList());
     }
 }
