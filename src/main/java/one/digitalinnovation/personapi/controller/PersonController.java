@@ -34,9 +34,15 @@ public class PersonController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)   // <---- Indica o melhor retorno da requisição, no caso o 'created'.
+    @ResponseStatus(HttpStatus.CREATED)
+    //                     <---- Indica o melhor retorno da requisição, no caso o 'created'.
     public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
         return personService.createPerson(personDTO);
+    }
+
+    @PutMapping("/{id}")
+    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.updateById(id, personDTO);
     }
 
     @DeleteMapping("/{id}")
