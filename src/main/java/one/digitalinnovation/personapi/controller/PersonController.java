@@ -1,5 +1,6 @@
 package one.digitalinnovation.personapi.controller;
 
+import lombok.AllArgsConstructor;
 import one.digitalinnovation.personapi.dto.request.PersonDTO;
 import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personapi.exception.PersonNotFoundException;
@@ -12,16 +13,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/person")
+@RequestMapping("/api/v1/people")
+@AllArgsConstructor(onConstructor = @__(@Autowired)) // Faz a injeção de dependências
 public class PersonController {
 
     private PersonService personService;
-
-    /* O @Autowired é posto no construtor para agilizar o teste unitário, caso haja um. */
-    @Autowired
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
 
     @GetMapping
     public List<PersonDTO> listAll() {
@@ -34,14 +30,13 @@ public class PersonController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    //                     <---- Indica o melhor retorno da requisição, no caso o 'created'.
+    @ResponseStatus(HttpStatus.CREATED)//                    <---- Indica o melhor retorno da requisição, no caso o 'created'.
     public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
         return personService.createPerson(personDTO);
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody PersonDTO personDTO) throws PersonNotFoundException {
+    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
         return personService.updateById(id, personDTO);
     }
 
